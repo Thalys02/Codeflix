@@ -87,5 +87,70 @@ public class CategoryTest
         Assert.Equal("Description should not be empty or null", exception.Message);
     }
 
+    [Theory(DisplayName = nameof(ErrorWhenNameIsLessThan3Characters))]
+    [Trait("Domain", "Category - Aggregates")]
+    [InlineData("ab")]
+    [InlineData("1")]
+    [InlineData("12")]
+    public void ErrorWhenNameIsLessThan3Characters(string invalidName)
+    {
+        Action action = () => new DomainEntity.Category(invalidName, "Category Ok description");
+        var exception = Assert.Throws<EntityValidationException>(action);
+        Assert.Equal("Name should be at leats 3 characters long", exception.Message);
+    }
+
+    [Fact(DisplayName = nameof(ErrorWhenNameIsGreaterThan255Characters))]
+    [Trait("Domain", "Category - Aggregates")]
+    public void ErrorWhenNameIsGreaterThan255Characters()
+    {
+        var invalidName = string.Join(null, Enumerable.Range(0, 256).Select(s => "a").ToArray());
+        Action action = () => new DomainEntity.Category(invalidName, "Category Ok description");
+        var exception = Assert.Throws<EntityValidationException>(action);
+        Assert.Equal("Name should be less or equals 255 characters long", exception.Message);
+    }
+
+    [Fact(DisplayName = nameof(ErrorWhenDescriptionIsGreaterThan10_000Characters))]
+    [Trait("Domain", "Category - Aggregates")]
+    public void ErrorWhenDescriptionIsGreaterThan10_000Characters()
+    {
+        var invalidDescription = string.Join(null, Enumerable.Range(0, 10_001).Select(s => "a").ToArray());
+        Action action = () => new DomainEntity.Category("Category Name", invalidDescription);
+        var exception = Assert.Throws<EntityValidationException>(action);
+        Assert.Equal("Description should be less or equals 10.000 characters long", exception.Message);
+    }
+    [Fact(DisplayName = nameof(Activate))]
+    [Trait("Domain", "Category - Aggregates")]
+    public void Activate()
+    {
+        //Arrange
+        var validData = new
+        {
+            Name = "category name",
+            Description = "category description"
+        };
+
+        //Act
+        var category = new DomainEntity.Category(validData.Name, validData.Description, false);
+        category.Activate();
+
+        Assert.True(category.IsActive);
+    }
+    [Fact(DisplayName = nameof(Deactivate))]
+    [Trait("Domain", "Category - Aggregates")]
+    public void Deactivate()
+    {
+        //Arrange
+        var validData = new
+        {
+            Name = "category name",
+            Description = "category description"
+        };
+
+        //Act
+        var category = new DomainEntity.Category(validData.Name, validData.Description, true);
+        category.Deactivate();
+
+        Assert.False(category.IsActive);
+    }
 }
 
