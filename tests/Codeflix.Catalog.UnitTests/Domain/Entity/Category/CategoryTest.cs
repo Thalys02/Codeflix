@@ -91,7 +91,7 @@ public class CategoryTest
         Action action = () => new DomainEntity.Category(validCategory.Name, null!);
         action.Should()
               .Throw<EntityValidationException>()
-              .WithMessage("Description should not be empty or null");
+              .WithMessage("Description should not be null");
     }
 
     [Theory(DisplayName = nameof(ErrorWhenNameIsLessThan3Characters))]
@@ -143,7 +143,7 @@ public class CategoryTest
 
         action.Should()
               .Throw<EntityValidationException>()
-              .WithMessage("Description should be less or equals 10.000 characters long");
+              .WithMessage("Description should be less or equals 10000 characters long");
     }
     [Fact(DisplayName = nameof(Activate))]
     [Trait("Domain", "Category - Aggregates")]
@@ -249,7 +249,7 @@ public class CategoryTest
 
         action.Should()
               .Throw<EntityValidationException>()
-              .WithMessage("Description should be less or equals 10.000 characters long");
+              .WithMessage("Description should be less or equals 10000 characters long");
     }
 }
 
