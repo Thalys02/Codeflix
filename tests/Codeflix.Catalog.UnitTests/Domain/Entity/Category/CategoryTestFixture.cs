@@ -4,6 +4,9 @@ using Xunit;
 using DomainEntity = Codeflix.Catalog.Domain.Entity;
 namespace Codeflix.Catalog.UnitTests.Domain.Entity.Category
 {
+    [CollectionDefinition(nameof(CategoryTestFixture))]
+    public class CategoryTestFixtureCollection : ICollectionFixture<CategoryTestFixture> { }
+
     public class CategoryTestFixture : BaseFixture
     {
         public CategoryTestFixture() : base() { }
@@ -30,7 +33,5 @@ namespace Codeflix.Catalog.UnitTests.Domain.Entity.Category
 }
 
 
-[CollectionDefinition(nameof(CategoryTestFixture))]
-public class CategoryTestFixtureCollection : ICollectionFixture<CategoryTestFixture> { }
 
 

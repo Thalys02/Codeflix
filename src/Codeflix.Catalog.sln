@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codeflix.Catalog.Domain", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codeflix.Catalog.UnitTests", "..\tests\Codeflix.Catalog.UnitTests\Codeflix.Catalog.UnitTests.csproj", "{8E8A1D33-9410-46D2-9B5C-11BB4288531E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codeflix.Catalog.Application", "Codeflix.Catalog.Application\Codeflix.Catalog.Application.csproj", "{EF7278F3-19B1-4668-9079-4223E869C2A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codeflix.Catalog.Application", "Codeflix.Catalog.Application\Codeflix.Catalog.Application.csproj", "{EF7278F3-19B1-4668-9079-4223E869C2A5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
