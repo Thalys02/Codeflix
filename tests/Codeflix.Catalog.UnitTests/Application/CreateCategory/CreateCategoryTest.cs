@@ -1,9 +1,6 @@
-﻿using Codeflix.Catalog.Application.Interfaces;
-using Codeflix.Catalog.Application.UseCases.Category.CreateCategory;
+﻿using Codeflix.Catalog.Application.UseCases.Category.CreateCategory;
 using Codeflix.Catalog.Domain.Entity;
 using Codeflix.Catalog.Domain.Exceptions;
-using Codeflix.Catalog.Domain.Repository;
-using Codeflix.Catalog.UnitTests.Domain.Entity.Category;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -54,6 +51,76 @@ namespace Codeflix.Catalog.UnitTests.Application.CreateCategory
             output.Id.Should().NotBeEmpty();
             output.CreatedAt.Should().NotBeSameDateAs(default(DateTime));
         }
+
+        [Fact(DisplayName = nameof(CreateCategoryWithOnlyName))]
+        [Trait("Application", "CreateCategory - Use Cases")]
+        public async void CreateCategoryWithOnlyName()
+        {
+            var repositoryMock = _fixture.GetRepositoryMock();
+            var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
+
+            var useCase = new UseCases.CreateCategory(repositoryMock.Object, unitOfWorkMock.Object);
+
+            var input = new CreateCategoryInput(_fixture.GetValidCategoryName());
+
+            var output = await useCase.Handle(input, CancellationToken.None);
+
+            repositoryMock.Verify(
+                repository => repository.Insert(
+                    It.IsAny<Category>(),
+                    It.IsAny<CancellationToken>()
+                    ),
+                Times.Once
+            );
+
+            unitOfWorkMock.Verify(
+                uow => uow.Commit(It.IsAny<CancellationToken>()),
+                Times.Once
+            );
+
+            output.Should().NotBeNull();
+            output.Name.Should().Be(input.Name);
+            output.Description.Should().Be("");
+            output.IsActive.Should().BeTrue();
+            output.Id.Should().NotBeEmpty();
+            output.CreatedAt.Should().NotBeSameDateAs(default(DateTime));
+        }
+
+        [Fact(DisplayName = nameof(CreateCategoryWithOnlyNameAndDescription))]
+        [Trait("Application", "CreateCategory - Use Cases")]
+        public async void CreateCategoryWithOnlyNameAndDescription()
+        {
+            var repositoryMock = _fixture.GetRepositoryMock();
+            var unitOfWorkMock = _fixture.GetUnitOfWorkMock();
+
+            var useCase = new UseCases.CreateCategory(repositoryMock.Object, unitOfWorkMock.Object);
+
+            var input = new CreateCategoryInput(_fixture.GetValidCategoryName(),_fixture.GetValidCategoryDescription());
+
+            var output = await useCase.Handle(input, CancellationToken.None);
+
+            repositoryMock.Verify(
+                repository => repository.Insert(
+                    It.IsAny<Category>(),
+                    It.IsAny<CancellationToken>()
+                    ),
+                Times.Once
+            );
+
+            unitOfWorkMock.Verify(
+                uow => uow.Commit(It.IsAny<CancellationToken>()),
+                Times.Once
+            );
+
+            output.Should().NotBeNull();
+            output.Name.Should().Be(input.Name);
+            output.Description.Should().Be(input.Description);
+            output.IsActive.Should().BeTrue();
+            output.Id.Should().NotBeEmpty();
+            output.CreatedAt.Should().NotBeSameDateAs(default(DateTime));
+        }
+
+
         [Theory(DisplayName = nameof(ThrowWhenCantInstantiateAggregate))]
         [Trait("Application", "CreateCategory - Use Cases")]
         [MemberData(nameof(GetInvalidInputs))]
@@ -100,14 +167,35 @@ namespace Codeflix.Catalog.UnitTests.Application.CreateCategory
                 "Name should be less or equals 255 characters long"
             });
             #endregion
-            //Nome não pode ser nulo
-            #region InvalidInputNullableName
+            //Descrição não pode ser nulo
+            #region InvalidInputNullableDescription
+            var invalidInputDescriptionNull = fixture.GetInput();
 
+            invalidInputDescriptionNull.Description = null!;
+
+            invalidInputsList.Add(new object[]{
+                invalidInputDescriptionNull,
+                "Description should not be null"
+            });
             #endregion
-            //Descrição não pode ser nula
-            #region InvalidInputNullableDescriotion
+
+            //Descrição não pode ser maior do que 10.000 caracteres
+            #region InvalidInputDescriptionGreater
+            var invalidInputTooLongDescription = fixture.GetInput();
+
+            var tooLongDescriptionForCategory = fixture.Faker.Commerce.ProductDescription();
+
+            while (tooLongDescriptionForCategory.Length <= 10_000)
+                tooLongDescriptionForCategory = $"{tooLongDescriptionForCategory} {fixture.Faker.Commerce.ProductDescription()}";
+
+            invalidInputTooLongDescription.Description = tooLongDescriptionForCategory;
+
+            invalidInputsList.Add(new object[]{
+                invalidInputTooLongDescription,
+                "Description should be less or equals 10000 characters long" });
             #endregion
             return invalidInputsList;
         }
+
     }
 }
