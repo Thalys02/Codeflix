@@ -1,4 +1,5 @@
 ﻿using Codeflix.Catalog.Application.Interfaces;
+using Codeflix.Catalog.Application.UseCases.Category.UpdateCategory;
 using Codeflix.Catalog.Domain.Entity;
 using Codeflix.Catalog.Domain.Repository;
 using Codeflix.Catalog.UnitTests.Common;
@@ -36,7 +37,14 @@ namespace Codeflix.Catalog.UnitTests.Application.UpdateCategory
         }
         public bool GetRandomBoolean()
             => (new Random().NextDouble() < 0.5);
-        public Category GetExampleCategory() 
+        public Category GetExampleCategory()
             => new Category(GetValidCategoryName(), GetValidCategoryDescription(), GetRandomBoolean());
+        public UpdateCategoryInput GetValidInput(Guid? id = null)
+
+            => new(id ?? Guid.NewGuid(),
+                    GetValidCategoryName(),
+                    GetValidCategoryDescription(),
+                    GetRandomBoolean());
+
     }
 }
