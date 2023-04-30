@@ -1,6 +1,8 @@
 ﻿using Codeflix.Catalog.Application.Interfaces;
+using Codeflix.Catalog.Application.UseCases.Category.ListCategories;
 using Codeflix.Catalog.Domain.Entity;
 using Codeflix.Catalog.Domain.Repository;
+using Codeflix.Catalog.Domain.SeedWork.SearchableRepository;
 using Codeflix.Catalog.UnitTests.Common;
 using Moq;
 using Xunit;
@@ -46,6 +48,16 @@ namespace Codeflix.Catalog.UnitTests.Application.ListCategories
                 list.Add(GetExampleCategory());
             }
             return list;
+        }
+        public ListCategoriesInput GetExampleInput()
+        {
+            var random = new Random();
+            return new ListCategoriesInput(
+                page: random.Next(1, 10),
+                perPage: random.Next(15, 100),
+                search: Faker.Commerce.ProductName(),
+                sort: Faker.Commerce.ProductName(),
+                direction: random.Next(0, 10) > 5 ? SearchOrder.Asc : SearchOrder.Desc);
         }
     }
 }
