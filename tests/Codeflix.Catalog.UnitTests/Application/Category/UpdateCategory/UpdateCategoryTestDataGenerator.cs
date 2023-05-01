@@ -1,6 +1,4 @@
-﻿using Codeflix.Catalog.UnitTests.Application.CreateCategory;
-
-namespace Codeflix.Catalog.UnitTests.Application.UpdateCategory
+﻿namespace Codeflix.Catalog.UnitTests.Application.Category.UpdateCategory
 {
     public class UpdateCategoryTestDataGenerator
     {
@@ -17,7 +15,7 @@ namespace Codeflix.Catalog.UnitTests.Application.UpdateCategory
                 };
             }
         }
-   
+
         public static IEnumerable<object[]> GetInvalidInputs(int times = 10)
         {
             var fixture = new UpdateCategoryTestFixture();

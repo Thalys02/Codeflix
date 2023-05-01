@@ -1,6 +1,6 @@
 ﻿using Codeflix.Catalog.Application.UseCases.Category.ListCategories;
 
-namespace Codeflix.Catalog.UnitTests.Application.ListCategories
+namespace Codeflix.Catalog.UnitTests.Application.Category.ListCategories
 {
     public class ListCategoriesTestDataGenerator
     {
