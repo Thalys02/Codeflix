@@ -14,34 +14,38 @@ public class Category : AggregateRoot
         CreatedAt = DateTime.Now;
         Validate();
     }
+
     public string Name { get; private set; }
     public string Description { get; private set; }
+    public string DescriptionTwoExemplo { get; private set; }
     public bool IsActive { get; private set; }
     public DateTime CreatedAt { get; private set; }
+
     private void Validate()
     {
-
         DomainValidation.NotNullOrEmpty(Name, nameof(Name));
 
         DomainValidation.MinLength(Name, 3, nameof(Name));
 
-        DomainValidation.MaxLength(Name, 255, nameof(Name));
+        DomainValidation.MaxLength(Name, 300, nameof(Name));
 
         DomainValidation.NotNull(Description, nameof(Description));
 
         DomainValidation.MaxLength(Description, 10_000, nameof(Description));
-
     }
+
     public void Activate()
     {
         IsActive = true;
         Validate();
     }
+
     public void Deactivate()
     {
         IsActive = false;
         Validate();
     }
+
     public void Update(string name, string? description = null)
     {
         Name = name;
@@ -49,4 +53,3 @@ public class Category : AggregateRoot
         Validate();
     }
 }
-
